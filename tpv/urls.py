@@ -1,8 +1,7 @@
-"""
-URL configuration for multitpv project.
+"""MiReserva URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
+    https://docs.djangoproject.com/en/dev/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -14,14 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from tpv import views
+from django.urls import path
+
+from .views import SaleList, SaleCreate, SaleDelete, add_sale
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include('users.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('', views.home),
-    path('sale/', include('tpv.urls')),
+    path('', SaleList.as_view(), name='sale-list'),
+    path('add/', SaleCreate.as_view(), name='sale-add'),
+    path('<int:pk>/delete/', SaleDelete.as_view(), name='sale-delete'),
+path('add-sale/', add_sale, name='crear_factura'),
 ]

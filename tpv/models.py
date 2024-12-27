@@ -1,5 +1,6 @@
 # Create your models here.
 from django.db import models
+from django.utils.timezone import now
 
 
 class TPV(models.Model):
@@ -40,7 +41,11 @@ class StockQuant(models.Model):
 
 class Sale(models.Model):
     tpv_id = models.ForeignKey(TPV, on_delete=models.CASCADE)
-    sale_date = models.DateTimeField("Fecha de venta")
+    sale_date = models.DateTimeField("Fecha de venta", default=now)
+    productos = models.ManyToManyField(ProductProduct, through='SaleLine')
+
+    def __str__(self):
+        return 'Venta '+str(self.id)+' '+self.tpv_id.name+' del '+self.sale_date.strftime('%Y-%m-%d %H:%M')
 
 
 class SaleLine(models.Model):

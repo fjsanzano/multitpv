@@ -20,6 +20,7 @@ class SaleLineInline(admin.TabularInline):
 
 
 class SaleAdmin(admin.ModelAdmin):
+    list_display = ('id', 'tpv_id', 'sale_date')
     inlines = [
         SaleLineInline,
     ]

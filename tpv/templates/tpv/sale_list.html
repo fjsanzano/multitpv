@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Ventas</h2>
+<ul>
+    {% for sale in object_list %}
+    <li>{{ sale.id }}-{{ sale.sale_date|date }} - {{ sale.tpv_id }}</li>
+    {% empty %}
+    <li>No hay ventas registradas.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
