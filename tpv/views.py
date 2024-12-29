@@ -20,6 +20,13 @@ def home(request):
     return render(request, 'home.html', context)
 
 
+def profile(request):
+    # establishment_list = Establishment.objects.all()
+    context = {}
+    return redirect('home')
+    # return render(request, 'home.html', context)
+
+
 class SaleList(LoginRequiredMixin, ListView):
     model = Sale
     paginate_by = 100  # if pagination is desired

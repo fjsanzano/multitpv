@@ -20,7 +20,7 @@ class ProductCategory(models.Model):
 class ProductProduct(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    image = models.FileField(upload_to='uploads/%Y/%m/%d/')
+    image = models.FileField(upload_to='media/uploads/%Y/%m/%d/')
     description = models.CharField(max_length=200)
     precio_costo = models.IntegerField(default=0)
     precio_venta = models.IntegerField(default=0)
