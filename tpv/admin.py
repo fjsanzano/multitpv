@@ -14,11 +14,11 @@ admin.site.register(ProductProduct, ProductAdmin)
 admin.site.register(ProductCategory)
 
 
-class StockQuantAdmin(admin.ModelAdmin):
-    list_display = ('tpv_id', 'product_id', 'cant')
-
-
-admin.site.register(StockQuant, StockQuantAdmin)
+# class StockQuantAdmin(admin.ModelAdmin):
+#     list_display = ('tpv_id', 'product_id', 'cant')
+#
+#
+# admin.site.register(StockQuant, StockQuantAdmin)
 
 
 class SaleLineInline(admin.TabularInline):

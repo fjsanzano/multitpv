@@ -2,22 +2,37 @@ from django.shortcuts import render
 from datetime import date
 # django library imports
 from django.shortcuts import render
+from django.db.models import Sum
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 # my apps imports
-from .models import Sale
+from .models import Sale, SaleLine, TPV, ProductProduct, PurchaseLine, Purchase
 from django.shortcuts import render, redirect
 from .forms import SaleForm, SaleLineForm
 
 # Create your views here.
 
+
 def home(request):
-    # establishment_list = Establishment.objects.all()
     context = {}
     return render(request, 'home.html', context)
+
+@login_required
+def stock(request):
+    tpv_list = []
+
+    for tpv in TPV.objects.all():
+        productos = ProductProduct.get_stock_by_tpv(ProductProduct, tpv=tpv)
+        tpv_list.append({
+            'tpv_name': tpv.name,
+            'productos': productos
+        })
+    context = {'tpv_list': tpv_list}
+    return render(request, 'tpv/get_stock.html', context)
 
 
 def profile(request):
@@ -46,11 +61,6 @@ class SaleCreate(LoginRequiredMixin, CreateView):
         # form.instance.reading_date = date.today
         return super().form_valid(form)
 
-
-# class MeterReadingUpdate(UpdateView):
-#     model = MeterReading
-#     fields = ['contract_number']
-#
 
 class SaleDelete(LoginRequiredMixin, DeleteView):
     model = Sale

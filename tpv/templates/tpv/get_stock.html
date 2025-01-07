@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Existencias de productos</h2>
+<ul>
+    {% for tpv in tpv_list %}
+    <li>{{ tpv.tpv_name }}</li>
+        <ul>
+        {% for product in tpv.productos %}
+        <li>{{ product.name }}--{{ product.stock }}</li>
+        {% endfor %}
+        </ul>
+    {% empty %}
+    <li>No hay puntos de venta registrados.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

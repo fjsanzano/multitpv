@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import SaleList, SaleCreate, SaleDelete, add_sale
+from .views import SaleList, SaleCreate, SaleDelete, stock
 
 urlpatterns = [
-    path('', SaleList.as_view(), name='sale-list'),
-    path('add/', SaleCreate.as_view(), name='sale-add'),
-    path('<int:pk>/delete/', SaleDelete.as_view(), name='sale-delete'),
-path('add-sale/', add_sale, name='crear_factura'),
+    path('stock/', stock, name='get_stock'),
+    # path('', SaleList.as_view(), name='sale-list'),
+    # path('add/', SaleCreate.as_view(), name='sale-add'),
+    # path('<int:pk>/delete/', SaleDelete.as_view(), name='sale-delete'),
+    # path('add-sale/', add_sale, name='crear_factura'),
 ]

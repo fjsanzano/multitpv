@@ -28,7 +28,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile/', views.profile),  # redirect to home page
     path('', views.home, name='home'),
-    path('sale/', include('tpv.urls')),
+    path('tpv/', include('tpv.urls')),
 ]
 # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
