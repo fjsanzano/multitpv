@@ -5,7 +5,7 @@ from django.db.models import Sum
 # from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.core.exceptions import ValidationError
 
 class TPV(models.Model):
     class Meta:
@@ -37,8 +37,8 @@ class ProductProduct(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     image = models.FileField(upload_to='media/uploads/%Y/%m/%d/')
     description = models.CharField(max_length=200)
-    precio_costo = models.IntegerField(default=0)
-    precio_venta = models.IntegerField(default=0)
+    precio_costo = models.FloatField(default=0.0)
+    precio_venta = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.name
@@ -57,6 +57,15 @@ class ProductProduct(models.Model):
                               },
                              )
         return productos
+
+    def get_stock_by_product(self, tpv):
+        sale_id_list = [sale.pk for sale in Sale.objects.filter(tpv_id=tpv.id)]
+        purchase_id_list = [purchase.pk for purchase in Purchase.objects.filter(tpv_id=tpv.id)]
+
+        purchase_cant = PurchaseLine.objects.filter(purchase_id__in=purchase_id_list, product_id=self.pk).aggregate(Sum('cant'))['cant__sum'] or 0
+        sale_cant = SaleLine.objects.filter(sale_id__in=sale_id_list, product_id=self.pk).aggregate(Sum('cant'))['cant__sum'] or 0
+
+        return purchase_cant - sale_cant
 
 
 class StockQuant(models.Model):
@@ -88,7 +97,13 @@ class SaleLine(models.Model):
     sale_id = models.ForeignKey(Sale, on_delete=models.CASCADE)
     product_id = models.ForeignKey(ProductProduct, on_delete=models.CASCADE)
     cant = models.IntegerField(default=1)
-    precio_venta = models.IntegerField(default=100)
+    precio_venta = models.FloatField(default=100)
+
+    def clean(self):
+        if self.product_id.get_stock_by_product(self.sale_id.tpv_id) <= 0:
+            raise ValidationError("El producto %s no tiene existencia en ese punto de venta %s."% (self.product_id.name, self.sale_id.tpv_id.name))
+
+
 
 class Purchase(models.Model):
     class Meta:
@@ -108,6 +123,6 @@ class PurchaseLine(models.Model):
     purchase_id = models.ForeignKey(Purchase, on_delete=models.CASCADE)
     product_id = models.ForeignKey(ProductProduct, on_delete=models.CASCADE)
     cant = models.IntegerField(default=1)
-    precio_compra = models.IntegerField(default=100)
+    precio_compra = models.FloatField(default=100.0)
 
 
