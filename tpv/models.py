@@ -71,28 +71,6 @@ class StockQuant(models.Model):
     def __str__(self):
         return self.tpv_id.name+self.product_id.name
 
-    # def update_stock(self, tpv_id, product_id, cant, operation):
-    #     # buscar si el producto tiene stock en ese punto de venta
-    #     stock = StockQuant.objects.filter(product_id=product_id, tpv_id=tpv_id)
-    #     # buscar tpv
-    #     tpv = TPV.objects.get(id=tpv_id)
-    #     product = ProductProduct.objects.get(id=product_id)
-    #     # si hay stock entonces se actualiza
-    #     if stock:
-    #         # si la operacion es una entradase suma la cantidad
-    #         if operation == 'in':
-    #             new_cant = stock[0].cant+cant
-    #             # stock[0].objects.update(cant=new_cant)
-    #             StockQuant.objects.filter(id=stock[0].pk).update(cant=new_cant)
-    #         else:
-    #             # si la operacion es una venta se resta la cantidad
-    #             new_cant = stock[0].cant - cant
-    #             # stock[0].objects.update(cant=new_cant)
-    #             StockQuant.objects.filter(id=stock[0].pk).update(cant=new_cant)
-    #     else:
-    #         # si no hay stock se crea el stock para ese punto de venta
-    #         StockQuant.objects.create(tpv_id=tpv, product_id=product, cant=cant)
-
 
 class Sale(models.Model):
     class Meta:
@@ -111,18 +89,6 @@ class SaleLine(models.Model):
     product_id = models.ForeignKey(ProductProduct, on_delete=models.CASCADE)
     cant = models.IntegerField(default=1)
     precio_venta = models.IntegerField(default=100)
-
-    # def save(self, *args, **kwargs):
-    #     if not self._state.adding:
-    #         print(self.cant)
-    #         # print(self._loaded_values["cant"])
-    #
-    #     res = super().save(*args, **kwargs)
-    #
-    #     StockQuant.update_stock(SaleLine, tpv_id=self.sale_id.tpv_id.pk, product_id=self.product_id.pk,
-    #                             cant=self.cant, operation='out')
-    #     return res
-
 
 class Purchase(models.Model):
     class Meta:
@@ -144,9 +110,4 @@ class PurchaseLine(models.Model):
     cant = models.IntegerField(default=1)
     precio_compra = models.IntegerField(default=100)
 
-    # def save(self, *args, **kwargs):
-    #     res = super().save(*args, **kwargs)
-    #
-    #     StockQuant.update_stock(PurchaseLine, tpv_id=self.purchase_id.tpv_id.pk, product_id=self.product_id.pk,
-    #                             cant=self.cant, operation='in')
-    #     return res
+

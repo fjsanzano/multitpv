@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import TPV, ProductCategory, ProductProduct, StockQuant, Sale, SaleLine, Purchase, PurchaseLine
+from .models import TPV, ProductCategory, ProductProduct, Sale, SaleLine, Purchase, PurchaseLine
 
 
 class ProductAdmin(admin.ModelAdmin):

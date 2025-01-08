@@ -3,17 +3,32 @@
 {% block content %}
 
 <h2>Existencias de productos</h2>
-<ul>
-    {% for tpv in tpv_list %}
-    <li>{{ tpv.tpv_name }}</li>
-        <ul>
-        {% for product in tpv.productos %}
-        <li>{{ product.name }}--{{ product.stock }}</li>
-        {% endfor %}
-        </ul>
+   {% for tpv in tpv_list %}
+    <h3>Punto de venta: {{ tpv.tpv_name }}</h3>
+    <table class="table table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Producto</th>
+      <th scope="col">Compras</th>
+      <th scope="col">Ventas</th>
+      <th scope="col">Existencias</th>
+    </tr>
+  </thead>
+
+  <tbody>
+ {% for product in tpv.productos %}
+    <tr {% if product.stock <= 0 %} class="table-danger" {% endif %}>
+      <th scope="row">{{ product.name }}</th>
+      <td>{{ product.purchase_cant }}</td>
+      <td>{{ product.sale_cant }}</td>
+      <td >{{ product.stock }}</td>
+    </tr>
+  </tbody>
+ {% endfor %}
+</table>
     {% empty %}
     <li>No hay puntos de venta registrados.</li>
     {% endfor %}
-</ul>
+
 
 {% endblock %}
